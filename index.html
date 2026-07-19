@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COSMIC Desktop Preview</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="desktop" class="desktop" aria-label="COSMIC desktop preview">
+    <div class="wallpaper" role="presentation"></div>
+
+    <!-- ========== Top Panel ========== -->
+    <header class="top-panel" role="banner">
+      <div class="panel-start">
+        <button type="button" class="panel-btn" id="panel-workspaces-btn" title="Workspaces" aria-label="Workspaces" aria-expanded="false" aria-controls="workspaces-overview">
+          <img src="assets/apps/com.system76.CosmicPanelWorkspacesButton.svg" alt="" draggable="false" />
+        </button>
+        <button type="button" class="panel-btn" id="panel-applibrary-btn" title="Applications" aria-label="App Library" aria-expanded="false" aria-controls="app-library">
+          <img src="assets/apps/com.system76.CosmicPanelAppButton.svg" alt="" draggable="false" />
+        </button>
+      </div>
+
+      <button type="button" class="panel-clock" id="clock-btn" aria-label="Date and time" aria-expanded="false" aria-controls="calendar-popover">
+        <span id="clock-text">Sat 15:44</span>
+      </button>
+
+      <div class="panel-end" role="toolbar" aria-label="System tray">
+        <button type="button" class="panel-icon-btn" id="tiling-btn" title="Tiling" aria-label="Tiling">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1" y="1" width="6" height="14" rx="1" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor"/></svg>
+        </button>
+        <button type="button" class="panel-icon-btn" id="sound-btn" title="Sound" aria-label="Sound" aria-expanded="false" aria-controls="sound-popover">
+          <img class="sym" src="assets/status/audio-volume-medium-symbolic.svg" alt="" draggable="false" />
+        </button>
+        <button type="button" class="panel-icon-btn" id="bluetooth-btn" title="Bluetooth" aria-label="Bluetooth">
+          <img class="sym" src="assets/status/bluetooth-active-symbolic.svg" alt="" draggable="false" />
+        </button>
+        <button type="button" class="panel-icon-btn" id="net-btn" title="Network" aria-label="Network" aria-expanded="false" aria-controls="net-popover">
+          <img class="sym" src="assets/status/network-wired-symbolic.svg" alt="" draggable="false" />
+        </button>
+        <button type="button" class="panel-icon-btn" id="batt-btn" title="Battery" aria-label="Battery" aria-expanded="false" aria-controls="batt-popover">
+          <img class="sym" src="assets/status/battery-symbolic.svg" alt="" draggable="false" />
+        </button>
+        <button type="button" class="panel-icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications" aria-expanded="false" aria-controls="notif-popover">
+          <img class="sym" src="assets/status/notification-symbolic.svg" alt="" draggable="false" />
+        </button>
+        <button type="button" class="panel-icon-btn" id="power-btn" title="Power" aria-label="Power" aria-expanded="false" aria-controls="power-popover">
+          <img class="sym" src="assets/status/system-shutdown-symbolic.svg" alt="" draggable="false" />
+        </button>
+      </div>
+    </header>
+
+    <!-- ========== Calendar popover (Time applet) ========== -->
+    <div class="popover calendar-popover" id="calendar-popover" role="dialog" aria-label="Calendar" hidden>
+      <div class="cal-time" id="cal-time">15:44</div>
+      <div class="cal-date-line" id="cal-full-date">Saturday, July 19, 2026</div>
+      <div class="cal-month-nav">
+        <button type="button" class="cal-nav-btn" id="cal-prev" aria-label="Previous month">‹</button>
+        <span class="cal-month-label" id="cal-month-label">July 2026</span>
+        <button type="button" class="cal-nav-btn" id="cal-next" aria-label="Next month">›</button>
+      </div>
+      <div class="cal-weekdays" aria-hidden="true">
+        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- ========== Sound popover ========== -->
+    <div class="popover tray-popover" id="sound-popover" role="dialog" aria-label="Sound" hidden>
+      <div class="tray-row">
+        <img class="sym" src="assets/status/audio-volume-medium-symbolic.svg" alt="" draggable="false" />
+        <input type="range" class="tray-slider" id="volume-slider" min="0" max="100" value="62" aria-label="Volume" />
+        <span class="tray-pct" id="volume-pct">62%</span>
+      </div>
+      <div class="tray-device">Speakers — Built-in Audio</div>
+    </div>
+
+    <!-- ========== Network popover ========== -->
+    <div class="popover tray-popover" id="net-popover" role="dialog" aria-label="Network" hidden>
+      <div class="tray-status-row">
+        <img class="sym" src="assets/status/network-wired-symbolic.svg" alt="" draggable="false" />
+        <div>
+          <div class="tray-name">Wired</div>
+          <div class="tray-sub">Connected</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== Battery popover ========== -->
+    <div class="popover tray-popover" id="batt-popover" role="dialog" aria-label="Battery" hidden>
+      <div class="tray-status-row">
+        <img class="sym" src="assets/status/battery-symbolic.svg" alt="" draggable="false" />
+        <div>
+          <div class="tray-name">Battery</div>
+          <div class="tray-sub">100% — Fully charged</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== Notifications popover ========== -->
+    <div class="popover tray-popover notif-popover" id="notif-popover" role="dialog" aria-label="Notifications" hidden>
+      <div class="notif-empty">
+        <img class="sym" src="assets/status/notification-symbolic.svg" alt="" draggable="false" />
+        <p>No new notifications</p>
+      </div>
+    </div>
+
+    <!-- ========== Power applet ========== -->
+    <div class="popover power-popover" id="power-popover" role="dialog" aria-label="Power" hidden>
+      <button type="button" class="power-item" data-action="lock">
+        <img class="sym" src="assets/status/system-lock-screen-symbolic.svg" alt="" draggable="false" />
+        <span class="power-label">
+          <span class="power-title">Lock Screen</span>
+          <span class="power-shortcut">Super + Escape</span>
+        </span>
+      </button>
+      <button type="button" class="power-item" data-action="logout">
+        <img class="sym" src="assets/status/system-log-out-symbolic.svg" alt="" draggable="false" />
+        <span class="power-label">
+          <span class="power-title">Log Out</span>
+          <span class="power-shortcut">Super + Shift + Escape</span>
+        </span>
+      </button>
+      <div class="power-sep"></div>
+      <div class="power-icons-row">
+        <button type="button" class="power-icon-btn" data-action="suspend" title="Suspend">
+          <img class="sym" src="assets/status/system-suspend-symbolic.svg" alt="" draggable="false" />
+          <span>Suspend</span>
+        </button>
+        <button type="button" class="power-icon-btn" data-action="restart" title="Restart">
+          <img class="sym" src="assets/status/system-reboot-symbolic.svg" alt="" draggable="false" />
+          <span>Restart</span>
+        </button>
+        <button type="button" class="power-icon-btn danger" data-action="shutdown" title="Shutdown">
+          <img class="sym" src="assets/status/system-shutdown-symbolic.svg" alt="" draggable="false" />
+          <span>Shutdown</span>
+        </button>
+      </div>
+      <div class="power-sep"></div>
+      <button type="button" class="power-settings-btn" id="power-settings-btn">Settings…</button>
+    </div>
+
+    <!-- ========== Workspaces Overview (cosmic-workspaces-epoch) ========== -->
+    <div class="workspaces-overview" id="workspaces-overview" role="dialog" aria-label="Workspaces" hidden>
+      <div class="ws-layout">
+        <!-- Vertical workspace strip (default WorkspaceLayout::Vertical) -->
+        <aside class="ws-sidebar" id="ws-sidebar" aria-label="Workspace list">
+          <!-- filled by JS -->
+        </aside>
+        <!-- Window previews for the active workspace -->
+        <div class="ws-toplevels" id="ws-toplevels" aria-label="Windows">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== COSMIC Launcher (Super) ========== -->
+    <div class="launcher-overlay" id="launcher" role="dialog" aria-label="Launcher" hidden>
+      <div class="launcher-panel">
+        <div class="launcher-search-wrap">
+          <img class="sym launcher-search-icon" src="assets/actions/system-search-symbolic.svg" alt="" draggable="false" />
+          <input
+            type="search"
+            id="launcher-search"
+            class="launcher-search"
+            placeholder="Type to search…"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Search"
+          />
+        </div>
+        <div class="launcher-results" id="launcher-results" role="list" aria-label="Results">
+          <!-- filled by JS -->
+        </div>
+        <p class="launcher-empty" id="launcher-empty" hidden>No results</p>
+      </div>
+    </div>
+
+    <!-- ========== COSMIC App Library ========== -->
+    <div class="app-library-overlay" id="app-library" role="dialog" aria-label="App Library" hidden>
+      <div class="app-library-panel">
+        <header class="app-library-header">
+          <div class="app-library-search-wrap">
+            <img class="sym" src="assets/actions/system-search-symbolic.svg" alt="" draggable="false" />
+            <input
+              type="search"
+              id="library-search"
+              class="app-library-search"
+              placeholder="Type to search apps…"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Search applications"
+            />
+          </div>
+        </header>
+
+        <div class="app-library-body">
+          <div class="app-library-grid" id="app-library-grid" role="list" aria-label="Applications">
+            <!-- filled by JS -->
+          </div>
+          <p class="app-library-empty" id="app-library-empty" hidden>No applications found</p>
+        </div>
+
+        <footer class="app-library-footer">
+          <div class="app-library-groups" id="app-library-groups" role="tablist" aria-label="App groups">
+            <!-- filled by JS -->
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ========== COSMIC Files ========== -->
+    <div class="files-window" id="files-window" role="dialog" aria-label="Home" hidden>
+      <header class="files-headerbar">
+        <div class="files-header-start">
+          <button type="button" class="files-header-btn" id="files-sidebar-toggle" title="Toggle sidebar" aria-label="Toggle sidebar" aria-pressed="true">
+            <img class="sym" src="assets/actions/navbar-open-symbolic.svg" alt="" draggable="false" />
+          </button>
+          <div class="files-menu-dropdown">
+            <button type="button" class="files-menu-btn" id="files-menu-btn" aria-haspopup="true" aria-expanded="false">
+              Menu
+              <span class="files-menu-caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="files-menu-popup" id="files-menu-popup" hidden>
+              <button type="button" class="files-menu-item" data-menu="file">File</button>
+              <button type="button" class="files-menu-item" data-menu="edit">Edit</button>
+              <button type="button" class="files-menu-item" data-menu="view">View</button>
+              <button type="button" class="files-menu-item" data-menu="sort">Sort</button>
+            </div>
+          </div>
+        </div>
+        <div class="files-header-title" id="files-header-title">Home</div>
+        <div class="files-header-end">
+          <button type="button" class="files-header-btn" id="files-search-toggle" title="Search" aria-label="Search" aria-pressed="false">
+            <img class="sym" src="assets/actions/system-search-symbolic.svg" alt="" draggable="false" />
+          </button>
+          <div class="files-window-controls">
+            <button type="button" class="files-wc files-min" title="Minimize" aria-label="Minimize"></button>
+            <button type="button" class="files-wc files-max" title="Maximize" aria-label="Maximize"></button>
+            <button type="button" class="files-wc files-close" id="files-close" title="Close" aria-label="Close"></button>
+          </div>
+        </div>
+      </header>
+
+      <div class="files-toolbar">
+        <div class="files-nav-group">
+          <button type="button" class="files-tb-btn" id="files-back" title="Back" aria-label="Back" disabled>
+            <img class="sym" src="assets/actions/go-previous-symbolic.svg" alt="" draggable="false" />
+          </button>
+          <button type="button" class="files-tb-btn" id="files-forward" title="Forward" aria-label="Forward" disabled>
+            <img class="sym" src="assets/actions/go-next-symbolic.svg" alt="" draggable="false" />
+          </button>
+        </div>
+        <div class="files-pathbar" id="files-pathbar">
+          <button type="button" class="files-crumb" data-place="home">
+            <img src="assets/places/user-home.svg" alt="" draggable="false" />
+            <span id="files-path-label">Home</span>
+          </button>
+        </div>
+        <div class="files-view-group">
+          <button type="button" class="files-tb-btn" id="files-view-grid" title="Grid view" aria-label="Grid view" aria-pressed="false">
+            <img class="sym" src="assets/actions/view-grid-symbolic.svg" alt="" draggable="false" />
+          </button>
+          <button type="button" class="files-tb-btn active" id="files-view-list" title="List view" aria-label="List view" aria-pressed="true">
+            <img class="sym" src="assets/actions/view-list-symbolic.svg" alt="" draggable="false" />
+          </button>
+          <button type="button" class="files-tb-btn" id="files-new-folder" title="New folder" aria-label="New folder">
+            <img class="sym" src="assets/actions/list-add-symbolic.svg" alt="" draggable="false" />
+          </button>
+        </div>
+      </div>
+
+      <div class="files-search-bar" id="files-search-bar" hidden>
+        <img class="sym" src="assets/actions/system-search-symbolic.svg" alt="" draggable="false" />
+        <input type="search" id="files-search-input" class="files-search-input" placeholder="Type to search" autocomplete="off" spellcheck="false" />
+      </div>
+
+      <div class="files-body">
+        <aside class="files-sidebar" id="files-sidebar" aria-label="Places">
+          <!-- filled by JS -->
+        </aside>
+        <div class="files-main">
+          <div class="files-content view-list" id="files-content" role="list">
+            <div class="files-list-header" aria-hidden="true">
+              <span class="flh-icon"></span>
+              <span class="flh-name">Name</span>
+              <span class="flh-modified">Modified</span>
+              <span class="flh-size">Size</span>
+            </div>
+            <!-- items filled by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== Bottom Dock ========== -->
+    <nav class="dock" id="dock" role="toolbar" aria-label="Dock">
+      <button type="button" class="dock-btn" id="dock-launcher-btn" title="Launcher" aria-label="Launcher">
+        <img src="assets/apps/com.system76.CosmicPanelLauncherButton.svg" alt="" draggable="false" />
+      </button>
+      <button type="button" class="dock-btn" id="dock-workspaces-btn" title="Workspaces" aria-label="Workspaces" aria-expanded="false" aria-controls="workspaces-overview">
+        <img src="assets/apps/com.system76.CosmicPanelWorkspacesButton.svg" alt="" draggable="false" />
+      </button>
+      <button type="button" class="dock-btn" id="dock-applibrary-btn" title="App Library" aria-label="App Library">
+        <img src="assets/apps/com.system76.CosmicPanelAppButton.svg" alt="" draggable="false" />
+      </button>
+
+      <span class="dock-sep" aria-hidden="true"></span>
+
+      <div class="dock-apps" id="dock-apps" aria-label="Pinned applications">
+        <!-- filled by JS -->
+      </div>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
